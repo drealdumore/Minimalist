@@ -16,6 +16,17 @@ const getUserId = () => {
   return userId;
 };
 
+// Fetch todos from localStorage
+const getTodosFromLocalStorage = () => {
+  const storedTodos = localStorage.getItem("todos");
+  return storedTodos ? JSON.parse(storedTodos) : [];
+};
+
+// Save todos to localStorage
+const saveTodosToLocalStorage = (todos) => {
+  localStorage.setItem("todos", JSON.stringify(todos));
+};
+
 export default function TodoApp() {
   const [todos, setTodos] = useState([]);
   const [newTodo, setNewTodo] = useState("");
@@ -30,13 +41,32 @@ export default function TodoApp() {
     if (error) {
       console.error("Error fetching todos:", error.message);
     } else {
-      setTodos(data || []);
+      const mergedTodos = mergeLocalAndDatabaseTodos(
+        getTodosFromLocalStorage(),
+        data
+      );
+      setTodos(mergedTodos);
+      saveTodosToLocalStorage(mergedTodos);
     }
+  };
+
+  const mergeLocalAndDatabaseTodos = (localTodos, dbTodos) => {
+    const dbTodoIds = dbTodos.map((todo) => todo.id);
+    const uniqueLocalTodos = localTodos.filter(
+      (todo) => !dbTodoIds.includes(todo.id)
+    );
+    return [...uniqueLocalTodos, ...dbTodos];
   };
 
   useEffect(() => {
     const id = getUserId();
     setUserId(id);
+
+    // Load todos from localStorage first
+    const localTodos = getTodosFromLocalStorage();
+    setTodos(localTodos);
+
+    // Then fetch from the database and sync
     fetchTodos(id);
   }, []);
 
@@ -48,14 +78,17 @@ export default function TodoApp() {
         completed: false,
         user_id: userId,
       };
-      const { data, error } = await supabase
-        .from("todos")
-        .insert([newTodoItem]);
 
+      // Save to localStorage first
+      const updatedTodos = [...todos, newTodoItem];
+      setTodos(updatedTodos);
+      saveTodosToLocalStorage(updatedTodos);
+
+      // Then sync with the database
+      const { error } = await supabase.from("todos").insert([newTodoItem]);
       if (error) {
         console.error("Error adding todo:", error.message);
       } else {
-        setTodos([...todos, newTodoItem]);
         setNewTodo("");
       }
     }
@@ -66,6 +99,7 @@ export default function TodoApp() {
       todo.id === id ? { ...todo, completed: !todo.completed } : todo
     );
     setTodos(updatedTodos);
+    saveTodosToLocalStorage(updatedTodos);
 
     const updatedTodo = updatedTodos.find((todo) => todo.id === id);
     if (updatedTodo) {
@@ -82,6 +116,10 @@ export default function TodoApp() {
   };
 
   const removeTodo = async (id) => {
+    const updatedTodos = todos.filter((todo) => todo.id !== id);
+    setTodos(updatedTodos);
+    saveTodosToLocalStorage(updatedTodos);
+
     const { error } = await supabase
       .from("todos")
       .delete()
@@ -90,8 +128,6 @@ export default function TodoApp() {
 
     if (error) {
       console.error("Error deleting todo:", error.message);
-    } else {
-      setTodos(todos.filter((todo) => todo.id !== id));
     }
   };
 
