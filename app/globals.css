@@ -7,6 +7,25 @@
   --secondary-background-color: #f0f0f0;
 }
 
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
+
+  .bg-dots {
+    @apply  bg-[radial-gradient(#e5e7eb_1px,transparent_1px)] [background-size:16px_16px];
+  }
+
+  .bg-grid {
+    @apply  bg-[linear-gradient(to_right,#80808012_1px,transparent_1px),linear-gradient(to_bottom,#80808012_1px,transparent_1px)] bg-[size:24px_24px];
+  }
+}
+
+@layer base {
+  html {
+    @apply font-SpaceGrotesk;
+  }
+}
 .checkbox-wrapper input[type="checkbox"] {
   display: none;
 }
@@ -31,21 +50,20 @@
   stroke: #000;
   stroke-dasharray: 800;
   stroke-dashoffset: 800;
-  transition: stroke-dashoffset 0.6s ease-in;
+  transition: stroke-dashoffset 0.4s ease-in;
 }
 
 .checkbox-wrapper .checkbox-tick {
   stroke: #000;
   stroke-dasharray: 172;
   stroke-dashoffset: 172;
-  transition: stroke-dashoffset 0.6s ease-in;
+  transition: stroke-dashoffset 0.1s ease-in;
 }
 
 .checkbox-wrapper input[type="checkbox"]:checked + .terms-label .checkbox-box,
 .checkbox-wrapper input[type="checkbox"]:checked + .terms-label .checkbox-tick {
   stroke-dashoffset: 0;
 }
-
 
 @keyframes shiftUpAnimation {
   0% {
@@ -59,8 +77,6 @@
 .shift-up {
   animation: shiftUpAnimation 0.5s ease forwards;
 }
-
-
 
 .shift-up {
   transform: translateY(-5rem);
