@@ -49,7 +49,6 @@ export default function TodoApp() {
 
     const localTodos = getTodosFromLocalStorage();
     setTodos(localTodos);
-    console.log(localTodos);
 
     fetchTodos(id);
   }, []);
