@@ -19,4 +19,14 @@ export const SOCIALS = {
     username: "drealdumore",
     url: "https://twitter.com/drealdumore",
   },
+
+  github: {
+    title: "GitHub",
+    url: "https://github.com/drealdumore",
+  },
+
+  linkedin: {
+    title: "LinkedIn",
+    url: "https://www.linkedin.com/in/samuel-isah",
+  },
 };

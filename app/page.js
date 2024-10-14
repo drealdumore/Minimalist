@@ -123,14 +123,14 @@ export default function TodoApp() {
               value={newTodo}
               onChange={(e) => setNewTodo(e.target.value)}
               placeholder="Add a new todo"
-              className="flex-grow mr-2 border rounded p-2 transition-all duration-75 ring-2 ring-neutral-300 border-none active:ring-neutral-500 hover:ring-neutral-500 outline-none "
+              className="flex-grow mr-2 border placeholder:text-sm rounded p-2 transition-all duration-75 ring-1 md:ring-2 ring-neutral-300 border-none active:ring-neutral-500 hover:ring-neutral-500 outline-none "
               onKeyPress={(e) => e.key === "Enter" && addTodo()}
             />
 
             <button
               disabled={!newTodo}
               onClick={addTodo}
-              className="cursor-pointer disabled:bg-neutral-950/65 rounded-md bg-neutral-950 px-2 md:px-3 py-1 text-sm text-white shadow-lg shadow-neutral-500/20 transition active:scale-[.95]"
+              className="cursor-pointer text-sm disabled:bg-neutral-950/65 rounded-md bg-neutral-950 px-2 md:px-3 py-1  text-white shadow-lg shadow-neutral-500/20 transition active:scale-[.95]"
             >
               Add Todo
             </button>

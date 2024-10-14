@@ -1,6 +1,7 @@
 import "./globals.css";
 import { sharedMetadata, SOCIALS } from "./utils/metadata";
 import localFont from "next/font/local";
+import Footer from "./components/footer";
 
 const SpaceGrotesk = localFont({
   src: "../public/assets/fonts/SpaceGrotesk-Regular.ttf",
@@ -13,7 +14,10 @@ export default function RootLayout({ children }) {
       lang="en"
       className={`flex items-center justify-center w-full scroll-smooth px-2 py-8 ${SpaceGrotesk.variable}`}
     >
-      <body>{children}</body>
+      <body>
+        {children}
+        <Footer />
+      </body>
     </html>
   );
 }
