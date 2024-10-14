@@ -25,8 +25,8 @@ To run this project, ensure you have the following installed:
 1. Clone this repository:
 
 ```bash
-git clone https://github.com/your-username/todo-app-with-supabase.git
-cd todo-app-with-supabase
+git clone https://github.com/drealdumore/Minimalist.git
+cd Minimalist
 ```
 
 2. Install dependencies:
@@ -79,6 +79,7 @@ Visit [http://localhost:3000](http://localhost:3000) to view the app.
 - **Database**: [Supabase](https://supabase.com/)
 - **State Management**: React `useState` and `useEffect`
 - **UI Components**: Custom components built with Tailwind CSS
+- **Animation**: [Framer Motion](https://www.framer.com/motion/)
 
 
 ## License

@@ -50,7 +50,8 @@
 
 .checkbox-wrapper .checkbox-svg {
   width: 30px;
-  height: 30px;
+  height: 20px;
+  /* height: 30px; */
 }
 
 .checkbox-wrapper .checkbox-box {
@@ -71,22 +72,4 @@
 .checkbox-wrapper input[type="checkbox"]:checked + .terms-label .checkbox-box,
 .checkbox-wrapper input[type="checkbox"]:checked + .terms-label .checkbox-tick {
   stroke-dashoffset: 0;
-}
-
-@keyframes shiftUpAnimation {
-  0% {
-    transform: translateY(0);
-  }
-  100% {
-    transform: translateY(-20px);
-  }
-}
-
-.shift-up {
-  animation: shiftUpAnimation 0.5s ease forwards;
-}
-
-.shift-up {
-  transform: translateY(-5rem);
-  transition: transform 0.5s ease;
 }
