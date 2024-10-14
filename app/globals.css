@@ -4,7 +4,6 @@
 
 :root {
   --primary-background-color: #e4e4e4;
-  --secondary-background-color: #f0f0f0;
 }
 
 @layer utilities {

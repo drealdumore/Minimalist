@@ -13,10 +13,7 @@ module.exports = {
         primary: "var(--primary-background-color)",
       },
       fontFamily: {
-        // cal: ["var(--font-calSans)"],
-        // bdog: ["var(--font-bdog)"],
         SpaceGrotesk: ["var(--font-SpaceGrotesk)", ...defaultTheme.fontFamily.sans],
-        // mono: ["var(--font-geist-mono)", ...defaultTheme.fontFamily.mono],
       },
     },
     
