@@ -13,11 +13,11 @@
   }
 
   .bg-dots {
-    @apply  bg-[radial-gradient(#e5e7eb_1px,transparent_1px)] [background-size:16px_16px];
+    @apply bg-[radial-gradient(#e5e7eb_1px,transparent_1px)] [background-size:16px_16px];
   }
 
   .bg-grid {
-    @apply  bg-[linear-gradient(to_right,#80808012_1px,transparent_1px),linear-gradient(to_bottom,#80808012_1px,transparent_1px)] bg-[size:24px_24px];
+    @apply bg-[linear-gradient(to_right,#80808012_1px,transparent_1px),linear-gradient(to_bottom,#80808012_1px,transparent_1px)] bg-[size:24px_24px];
   }
 }
 
@@ -25,7 +25,16 @@
   html {
     @apply font-SpaceGrotesk;
   }
+
+  body {
+    @apply transition-all duration-700 font-SpaceGrotesk bg-primary;
+  }
+
+  ::selection {
+    @apply bg-neutral-800 text-white;
+  }
 }
+
 .checkbox-wrapper input[type="checkbox"] {
   display: none;
 }

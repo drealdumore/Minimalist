@@ -10,7 +10,7 @@ export const sharedMetadata = {
     height: 630,
     type: "image/png",
   },
-  //   image: "./og.png",
+    image: "./og.png",
 };
 
 export const SOCIALS = {

@@ -1,6 +1,12 @@
 const getTodosFromLocalStorage = () => {
   const storedTodos = localStorage.getItem("todos");
-  return storedTodos ? JSON.parse(storedTodos) : [];
+
+  try {
+    return storedTodos ? JSON.parse(storedTodos) : [];
+  } catch (error) {
+    console.error("Error parsing JSON from localStorage:", error);
+    return [];
+  }
 };
 
 export default getTodosFromLocalStorage;
