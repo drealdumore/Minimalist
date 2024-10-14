@@ -3,7 +3,7 @@ import { sharedMetadata, SOCIALS } from "./utils/metadata";
 import localFont from "next/font/local";
 
 const SpaceGrotesk = localFont({
-  src: "../assets/fonts/SpaceGrotesk-Regular.ttf",
+  src: "../public/assets/fonts/SpaceGrotesk-Regular.ttf",
   variable: "--font-SpaceGrotesk",
 });
 
