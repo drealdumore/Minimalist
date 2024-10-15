@@ -148,11 +148,11 @@ export default function TodoApp() {
             </div>
           ) : (
             <AnimatePresence>
-              <motion.ul className="space-y-2 font-sans">
+              <motion.ul className="space-y-2 font-sans font-light">
                 {todos.map((todo) => (
                   <motion.li
                     key={todo.id}
-                    className="flex max-w-[24rem] w-[24rem] items-center justify-between bg-muted p-2 rounded"
+                    className="flex w-[21rem] md:w-[26rem] items-center justify-between bg-muted p-2 rounded"
                     initial={{ opacity: 0, y: 15 }}
                     animate={{ opacity: 1, y: 0 }}
                     exit={{
