@@ -9,12 +9,8 @@ const SpaceGrotesk = localFont({
 });
 
 export default function RootLayout({ children }) {
-  
   return (
-    <html
-      lang="en"
-      className={`w-full scroll-smooth px-2 py-8 ${SpaceGrotesk.variable}`}
-    >
+    <html lang="en" className={`${SpaceGrotesk.variable}`}>
       <body>
         <main className="flex-grow flex items-center justify-center w-full">
           {children}
@@ -23,18 +19,6 @@ export default function RootLayout({ children }) {
       </body>
     </html>
   );
-  
-  // return (
-  //   <html
-  //     lang="en"
-  //     className={`flex items-center justify-center w-full scroll-smooth px-2 py-8 ${SpaceGrotesk.variable}`}
-  //   >
-  //     <body>
-  //       {children}
-  //       <Footer />
-  //     </body>
-  //   </html>
-  // );
 }
 
 export const metadata = {

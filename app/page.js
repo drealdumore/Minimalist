@@ -191,7 +191,7 @@ export default function TodoApp() {
 
                       <button
                         onClick={() => removeTodo(todo.id)}
-                        className="bg-neutral-300 ml-2 p-2 rounded-xl duration-75 hover:bg-gray-300 transition active:scale-[.95]"
+                        className="bg-neutral-300 ml-2 p-2 self-start rounded-xl duration-75 hover:bg-gray-300 transition active:scale-[.95]"
                       >
                         <svg viewBox="0 0 15 15" className="w-5 fill-white">
                           <svg

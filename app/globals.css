@@ -40,7 +40,7 @@
 
 @layer base {
   html {
-    @apply font-SpaceGrotesk;
+    @apply font-SpaceGrotesk w-full scroll-smooth px-2 py-8;
   }
 
   body {
