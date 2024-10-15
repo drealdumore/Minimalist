@@ -120,96 +120,102 @@ export default function TodoApp() {
             The most minimal Todo app.
           </p>
 
-          <div className="flex mb-4">
-            <input
-              type="text"
-              value={newTodo}
-              onChange={(e) => setNewTodo(e.target.value)}
-              placeholder="Add a new todo"
-              className="flex-grow mr-2 border placeholder:text-sm rounded p-2 transition-all duration-75 ring-1 md:ring-2 ring-neutral-300 border-none active:ring-neutral-500 hover:ring-neutral-500 outline-none "
-              onKeyPress={(e) => e.key === "Enter" && addTodo()}
-            />
+          <div className="content">
+            <div className="flex mb-4">
+              <input
+                type="text"
+                value={newTodo}
+                onChange={(e) => setNewTodo(e.target.value)}
+                placeholder="Add a new todo"
+                className="flex-grow mr-2 border placeholder:text-sm placeholder:font-thin placeholder:font-sans rounded p-2 transition-all duration-75 ring-1 md:ring-2 ring-neutral-300 border-none active:ring-neutral-500 hover:ring-neutral-500 outline-none "
+                onKeyPress={(e) => e.key === "Enter" && addTodo()}
+              />
 
-            <button
-              disabled={!newTodo}
-              onClick={addTodo}
-              className="cursor-pointer text-sm disabled:bg-neutral-950/65 rounded-md bg-neutral-950 px-2 md:px-3 py-1  text-white shadow-lg shadow-neutral-500/20 transition active:scale-[.95]"
-            >
-              Add Todo
-            </button>
-          </div>
-          {loading ? (
-            <div
-              className="inline-block size-4 animate-spin rounded-full border-2 border-current border-t-transparent text-black"
-              role="status"
-              aria-label="loading"
-            >
-              <span className="sr-only">Loading...</span>
+              <button
+                disabled={!newTodo}
+                onClick={addTodo}
+                className="cursor-pointer text-sm font-thin disabled:bg-neutral-950/65 rounded-md bg-neutral-950 px-2 md:px-3 py-1  text-white shadow-lg shadow-neutral-500/20 transition active:scale-[.95]"
+              >
+                Add Todo
+              </button>
             </div>
-          ) : (
-            <AnimatePresence>
-              <motion.ul className="space-y-2 font-sans font-light">
-                {todos.map((todo) => (
-                  <motion.li
-                    key={todo.id}
-                    className="flex w-[21rem] md:w-[26rem] items-center justify-between bg-muted p-2 rounded"
-                    initial={{ opacity: 0, y: 15 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    exit={{
-                      opacity: 0,
-                      y: -15,
-                      height: 0,
-                      marginBottom: 0,
-                      paddingTop: 0,
-                      transition: { duration: 0.2 },
-                    }}
-                    transition={{ type: "spring", stiffness: 300, damping: 20 }}
-                  >
-                    <div className="flex">
-                      <Checkbox
-                        id={`todo-${todo.id}`}
-                        checked={todo.completed}
-                        onChange={() => toggleTodo(todo.id)}
-                        className="mr-2"
-                      />
-                      <label
-                        htmlFor={`todo-${todo.id}`}
-                        className={`text-start ${
-                          todo.completed
-                            ? "line-through text-muted-foreground"
-                            : ""
-                        }`}
-                      >
-                        {todo.text}
-                      </label>
-                    </div>
-
-                    <button
-                      onClick={() => removeTodo(todo.id)}
-                      className="bg-neutral-300 ml-2 p-2 rounded-xl duration-75 hover:bg-gray-300 transition active:scale-[.95]"
+            {loading ? (
+              <div
+                className="inline-block size-4 animate-spin rounded-full border-2 border-current border-t-transparent text-black"
+                role="status"
+                aria-label="loading"
+              >
+                <span className="sr-only">Loading...</span>
+              </div>
+            ) : (
+              <AnimatePresence>
+                <motion.ul className="space-y-2 font-sans font-light">
+                  {todos.map((todo) => (
+                    <motion.li
+                      key={todo.id}
+                      className="flex items-center justify-between bg-muted p-2 rounded"
+                      initial={{ opacity: 0, y: 15 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      exit={{
+                        opacity: 0,
+                        y: -15,
+                        height: 0,
+                        marginBottom: 0,
+                        paddingTop: 0,
+                        transition: { duration: 0.2 },
+                      }}
+                      transition={{
+                        type: "spring",
+                        stiffness: 300,
+                        damping: 20,
+                      }}
                     >
-                      <svg viewBox="0 0 15 15" className="w-5 fill-white">
-                        <svg
-                          className="w-6 h-6 stroke-red-500"
-                          stroke="currentColor"
-                          strokeWidth="1.5"
-                          viewBox="0 0 24 24"
-                          fill="none"
-                          xmlns="http://www.w3.org/2000/svg"
+                      <div className="flex">
+                        <Checkbox
+                          id={`todo-${todo.id}`}
+                          checked={todo.completed}
+                          onChange={() => toggleTodo(todo.id)}
+                          className="mr-2"
+                        />
+                        <label
+                          htmlFor={`todo-${todo.id}`}
+                          className={`text-start ${
+                            todo.completed
+                              ? "line-through text-muted-foreground"
+                              : ""
+                          }`}
                         >
-                          <path
-                            d="M14.74 9l-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 01-2.244 2.077H8.084a2.25 2.25 0 01-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 00-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 013.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 00-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 00-7.5 0"
-                            strokeLinejoin="round"
-                            strokeLinecap="round"
-                          ></path>
+                          {todo.text}
+                        </label>
+                      </div>
+
+                      <button
+                        onClick={() => removeTodo(todo.id)}
+                        className="bg-neutral-300 ml-2 p-2 rounded-xl duration-75 hover:bg-gray-300 transition active:scale-[.95]"
+                      >
+                        <svg viewBox="0 0 15 15" className="w-5 fill-white">
+                          <svg
+                            className="w-6 h-6 stroke-red-500"
+                            stroke="currentColor"
+                            strokeWidth="1.5"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            xmlns="http://www.w3.org/2000/svg"
+                          >
+                            <path
+                              d="M14.74 9l-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 01-2.244 2.077H8.084a2.25 2.25 0 01-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 00-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 013.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 00-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 00-7.5 0"
+                              strokeLinejoin="round"
+                              strokeLinecap="round"
+                            ></path>
+                          </svg>
                         </svg>
-                      </svg>
-                    </button>
-                  </motion.li>
-                ))}
-              </motion.ul>
-            </AnimatePresence>
-          )}
+                      </button>
+                    </motion.li>
+                  ))}
+                </motion.ul>
+              </AnimatePresence>
+            )}
+          </div>
         </div>
       </div>
     </Motion>

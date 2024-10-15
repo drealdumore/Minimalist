@@ -6,7 +6,6 @@
   --primary-background-color: #e4e4e4;
 }
 
-
 ::-webkit-scrollbar-track {
   box-shadow: inset 0 0 0 #0da24e;
   border-radius: 0;
@@ -32,6 +31,10 @@
 
   .bg-grid {
     @apply bg-[linear-gradient(to_right,#80808012_1px,transparent_1px),linear-gradient(to_bottom,#80808012_1px,transparent_1px)] bg-[size:24px_24px];
+  }
+
+  .content {
+    @apply w-[21rem] md:w-[26rem] font-sans;
   }
 }
 
@@ -88,4 +91,3 @@
 .checkbox-wrapper input[type="checkbox"]:checked + .terms-label .checkbox-tick {
   stroke-dashoffset: 0;
 }
-
