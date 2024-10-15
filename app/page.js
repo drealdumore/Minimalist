@@ -116,7 +116,7 @@ export default function TodoApp() {
       <div className="flex flex-col gap-3 text-center justify-center items-center relative">
         <div className="max-w-md mx-auto p-4 bg-background">
           <h1 className="text-3xl font-bold text-center">Minimalist.</h1>
-          <p className="text-xl font-light mb-4 text-center">
+          <p className="text-xl font-thin mb-4 text-center">
             The most minimal Todo app.
           </p>
 
@@ -127,14 +127,14 @@ export default function TodoApp() {
                 value={newTodo}
                 onChange={(e) => setNewTodo(e.target.value)}
                 placeholder="Add a new todo"
-                className="flex-grow mr-2 border placeholder:text-sm placeholder:font-thin placeholder:font-sans rounded p-2 transition-all duration-75 ring-1 md:ring-2 ring-neutral-300 border-none active:ring-neutral-500 hover:ring-neutral-500 outline-none "
+                className="flex-grow mr-2 border placeholder:text-sm placeholder:font-light placeholder:font-sans rounded p-2 transition-all duration-75 ring-1 md:ring-2 ring-neutral-300 border-none active:ring-neutral-500 hover:ring-neutral-500 outline-none "
                 onKeyPress={(e) => e.key === "Enter" && addTodo()}
               />
 
               <button
                 disabled={!newTodo}
                 onClick={addTodo}
-                className="cursor-pointer text-sm font-thin disabled:bg-neutral-950/65 rounded-md bg-neutral-950 px-2 md:px-3 py-1  text-white shadow-lg shadow-neutral-500/20 transition active:scale-[.95]"
+                className="cursor-pointer text-sm font-light disabled:bg-neutral-950/65 rounded-md bg-neutral-950 px-2 md:px-3 py-1  text-white shadow-lg shadow-neutral-500/20 transition active:scale-[.95]"
               >
                 Add Todo
               </button>

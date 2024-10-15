@@ -1,5 +1,5 @@
 export const sharedMetadata = {
-  title: "Minimalist",
+  title: "Minimalist.",
   description: "Minimal accessible todo app.",
   url:
     process.env.NODE_ENV === "development"
