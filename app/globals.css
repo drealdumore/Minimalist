@@ -6,6 +6,21 @@
   --primary-background-color: #e4e4e4;
 }
 
+
+::-webkit-scrollbar-track {
+  box-shadow: inset 0 0 0 #0da24e;
+  border-radius: 0;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #0d1117;
+  border-radius: 10px;
+}
+
+::-webkit-scrollbar {
+  width: 8px;
+}
+
 @layer utilities {
   .text-balance {
     text-wrap: balance;
@@ -26,7 +41,7 @@
   }
 
   body {
-    @apply transition-all duration-700 font-SpaceGrotesk bg-primary;
+    @apply min-h-screen items-center justify-between transition-all duration-700 font-SpaceGrotesk bg-primary flex flex-col;
   }
 
   ::selection {
@@ -73,3 +88,4 @@
 .checkbox-wrapper input[type="checkbox"]:checked + .terms-label .checkbox-tick {
   stroke-dashoffset: 0;
 }
+

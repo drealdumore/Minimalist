@@ -113,9 +113,13 @@ export default function TodoApp() {
 
   return (
     <Motion>
-      <main className="flex flex-col gap-3 min-h-screen text-center justify-center items-center relative">
+      <div className="flex flex-col gap-3 text-center justify-center items-center relative">
         <div className="max-w-md mx-auto p-4 bg-background">
-          <h1 className="text-3xl font-bold mb-4 text-center">Minimalist</h1>
+          <h1 className="text-3xl font-bold text-center">Minimalist.</h1>
+          <p className="text-xl font-light mb-4 text-center">
+            The most minimal Todo app.
+          </p>
+
           <div className="flex mb-4">
             <input
               type="text"
@@ -144,11 +148,11 @@ export default function TodoApp() {
             </div>
           ) : (
             <AnimatePresence>
-              <motion.ul className="space-y-2">
+              <motion.ul className="space-y-2 font-sans">
                 {todos.map((todo) => (
                   <motion.li
                     key={todo.id}
-                    className="flex items-center justify-between bg-muted p-2 rounded"
+                    className="flex max-w-[24rem] w-[24rem] items-center justify-between bg-muted p-2 rounded"
                     initial={{ opacity: 0, y: 15 }}
                     animate={{ opacity: 1, y: 0 }}
                     exit={{
@@ -161,7 +165,7 @@ export default function TodoApp() {
                     }}
                     transition={{ type: "spring", stiffness: 300, damping: 20 }}
                   >
-                    <div className="flex items-center">
+                    <div className="flex">
                       <Checkbox
                         id={`todo-${todo.id}`}
                         checked={todo.completed}
@@ -170,7 +174,7 @@ export default function TodoApp() {
                       />
                       <label
                         htmlFor={`todo-${todo.id}`}
-                        className={`${
+                        className={`text-start ${
                           todo.completed
                             ? "line-through text-muted-foreground"
                             : ""
@@ -182,7 +186,7 @@ export default function TodoApp() {
 
                     <button
                       onClick={() => removeTodo(todo.id)}
-                      className="bg-neutral-300 p-2 rounded-xl duration-75 hover:bg-gray-300 transition active:scale-[.95]"
+                      className="bg-neutral-300 ml-2 p-2 rounded-xl duration-75 hover:bg-gray-300 transition active:scale-[.95]"
                     >
                       <svg viewBox="0 0 15 15" className="w-5 fill-white">
                         <svg
@@ -207,7 +211,7 @@ export default function TodoApp() {
             </AnimatePresence>
           )}
         </div>
-      </main>
+      </div>
     </Motion>
   );
 }
