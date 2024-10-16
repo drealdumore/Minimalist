@@ -1,6 +1,5 @@
 "use client";
 import { motion, AnimatePresence } from "framer-motion";
-
 import { useEffect, useState } from "react";
 import { supabase } from "./lib/supabaseClient";
 import Checkbox from "./components/checkbox";
@@ -116,8 +115,8 @@ export default function TodoApp() {
       <div className="flex flex-col gap-3 text-center justify-center items-center relative">
         <div className="max-w-md mx-auto p-4 bg-background">
           <h1 className="text-3xl font-bold text-center">Minimalist.</h1>
-          <p className="text-xl font-thin mb-4 text-center">
-            The most minimal Todo app.
+          <p className="sm:text-xl  font-thin mb-4 text-center">
+            The most minimal Todo app
           </p>
 
           <div className="content">
@@ -127,7 +126,7 @@ export default function TodoApp() {
                 value={newTodo}
                 onChange={(e) => setNewTodo(e.target.value)}
                 placeholder="Add a new todo"
-                className="flex-grow mr-2 border placeholder:text-sm placeholder:font-light placeholder:font-sans rounded p-2 transition-all duration-75 ring-1 md:ring-2 ring-neutral-300 border-none active:ring-neutral-500 hover:ring-neutral-500 outline-none "
+                className="flex-grow mr-2 border font-light placeholder:text-sm placeholder:font-light placeholder:font-sans rounded p-2 transition-all duration-75 ring-1 md:ring-2 ring-neutral-300 border-none active:ring-neutral-500 hover:ring-neutral-500 outline-none "
                 onKeyPress={(e) => e.key === "Enter" && addTodo()}
               />
 
@@ -153,22 +152,17 @@ export default function TodoApp() {
                   {todos.map((todo) => (
                     <motion.li
                       key={todo.id}
-                      className="flex items-center justify-between bg-muted p-2 rounded"
-                      initial={{ opacity: 0, y: 15 }}
+                      className="flex items-center justify-between p-2 rounded"
+                      initial={{ opacity: 0, y: 20 }}
                       animate={{ opacity: 1, y: 0 }}
-                      exit={{
-                        opacity: 0,
-                        y: -15,
-                        height: 0,
-                        marginBottom: 0,
-                        paddingTop: 0,
-                        transition: { duration: 0.2 },
-                      }}
+                      exit={{ opacity: 0, y: -20 }}
                       transition={{
                         type: "spring",
                         stiffness: 300,
                         damping: 20,
+                        duration: 0.5,
                       }}
+                      layout
                     >
                       <div className="flex">
                         <Checkbox
