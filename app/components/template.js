@@ -170,57 +170,60 @@ export default function TodoApp() {
             ) : (
               <AnimatePresence>
                 <motion.ul className="space-y-2 font-sans font-light">
-                  {todos.map((todo) => (
-                    <motion.li
-                      key={todo.id}
-                      className="flex items-center justify-between p-2 rounded"
-                      initial={{ opacity: 0, y: 15 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      exit={{
-                        opacity: 0,
-                        y: -15,
-                        height: 0,
-                        marginBottom: 0,
-                        paddingTop: 0,
-                        transition: { duration: 0.2 },
-                      }}
-                      transition={{
-                        type: "spring",
-                        stiffness: 300,
-                        damping: 20,
-                        duration: 0.5,
-                      }}
-                      layout
-                    >
-                      <div className="flex items-center w-full">
-                        <Checkbox
-                          id={`todo-${todo.id}`}
-                          checked={todo.completed}
-                          onChange={() => toggleTodo(todo.id)}
-                          className="mr-2 mt-1.5 self-start"
-                          aria-label={`Mark todo ${todo.text} as completed`}
-                        />
-                        <p
-                          htmlFor={`todo-${todo.id}`}
-                          className={`text-start truncate w-[15rem] ${
-                            todo.completed
-                              ? "line-through text-muted-foreground"
-                              : ""
-                          }`}
-                        >
-                          {todo.text}
-                        </p>
-                      </div>
-
-                      <button
-                        onClick={() => removeTodo(todo.id)}
-                        aria-label="Remove todo"
-                        className="bg-neutral-300 ml-2 p-2 self-start rounded-xl duration-75 hover:bg-gray-300 transition active:scale-[.95]"
+                  {todos
+                    .slice()
+                    .reverse()
+                    .map((todo) => (
+                      <motion.li
+                        key={todo.id}
+                        className="flex items-center justify-between p-2 rounded"
+                        initial={{ opacity: 0, y: 15 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        exit={{
+                          opacity: 0,
+                          y: -15,
+                          height: 0,
+                          marginBottom: 0,
+                          paddingTop: 0,
+                          transition: { duration: 0.2 },
+                        }}
+                        transition={{
+                          type: "spring",
+                          stiffness: 300,
+                          damping: 20,
+                          duration: 0.5,
+                        }}
+                        layout
                       >
-                        <Trash />
-                      </button>
-                    </motion.li>
-                  ))}
+                        <div className="flex items-center w-full">
+                          <Checkbox
+                            id={`todo-${todo.id}`}
+                            checked={todo.completed}
+                            onChange={() => toggleTodo(todo.id)}
+                            className="mr-2 mt-1.5 self-start"
+                            aria-label={`Mark todo ${todo.text} as completed`}
+                          />
+                          <p
+                            htmlFor={`todo-${todo.id}`}
+                            className={`text-start truncate w-[15rem] ${
+                              todo.completed
+                                ? "line-through text-muted-foreground"
+                                : ""
+                            }`}
+                          >
+                            {todo.text}
+                          </p>
+                        </div>
+
+                        <button
+                          onClick={() => removeTodo(todo.id)}
+                          aria-label="Remove todo"
+                          className="bg-neutral-300 ml-2 p-2 self-start rounded-xl duration-75 hover:bg-gray-300 transition active:scale-[.95]"
+                        >
+                          <Trash />
+                        </button>
+                      </motion.li>
+                    ))}
                 </motion.ul>
               </AnimatePresence>
             )}
