@@ -1,18 +1,33 @@
 "use client";
-import { motion, AnimatePresence } from "framer-motion";
+
 import { useEffect, useState } from "react";
+
+import { motion, AnimatePresence } from "framer-motion";
 import { supabase } from "./lib/supabaseClient";
+
 import Checkbox from "./components/checkbox";
+import Trash from "./components/trash";
+
+import Motion from "./lib/motion/y-motion";
+
 import getUserId from "./utils/getUserId";
 import getTodosFromLocalStorage from "./utils/localStorage/getTodos";
 import saveTodosToLocalStorage from "./utils/localStorage/saveTodos";
-import Motion from "./lib/motion/y-motion";
+
+const debounce = (func, delay) => {
+  let timeoutId;
+  return (...args) => {
+    clearTimeout(timeoutId);
+    timeoutId = setTimeout(() => func(...args), delay);
+  };
+};
 
 export default function TodoApp() {
   const [todos, setTodos] = useState([]);
   const [newTodo, setNewTodo] = useState("");
   const [userId, setUserId] = useState("");
   const [loading, setLoading] = useState(false);
+  const [showSpinner, setShowSpinner] = useState(false);
 
   const fetchTodos = async (userId) => {
     setLoading(true);
@@ -52,7 +67,7 @@ export default function TodoApp() {
     fetchTodos(id);
   }, []);
 
-  const addTodo = async () => {
+  const addTodo = debounce(async () => {
     if (newTodo.trim() !== "") {
       const newTodoItem = {
         id: Date.now(),
@@ -72,7 +87,7 @@ export default function TodoApp() {
         console.error("Error adding todo:", error.message);
       }
     }
-  };
+  }, 200);
 
   const toggleTodo = async (id) => {
     const updatedTodos = todos.map((todo) =>
@@ -110,12 +125,20 @@ export default function TodoApp() {
     }
   };
 
+  useEffect(() => {
+    if (loading) {
+      const timer = setTimeout(() => setShowSpinner(true), 300); // 300ms delay
+      return () => clearTimeout(timer);
+    }
+    setShowSpinner(false);
+  }, [loading]);
+
   return (
     <Motion>
       <div className="flex flex-col gap-3 text-center justify-center items-center relative">
         <div className="max-w-md mx-auto p-4 bg-background">
           <h1 className="text-3xl font-bold text-center">Minimalist.</h1>
-          <p className="sm:text-xl  font-thin mb-4 text-center">
+          <p className="sm:text-xl font-thin mb-4 text-center">
             The most minimal Todo app
           </p>
 
@@ -127,12 +150,14 @@ export default function TodoApp() {
                 onChange={(e) => setNewTodo(e.target.value)}
                 placeholder="Add a new todo"
                 className="flex-grow mr-2 border font-light placeholder:text-sm placeholder:font-light placeholder:font-sans rounded p-2 transition-all duration-75 ring-1 md:ring-2 ring-neutral-300 border-none active:ring-neutral-500 hover:ring-neutral-500 outline-none "
+                aria-label="Add a new todo"
                 onKeyPress={(e) => e.key === "Enter" && addTodo()}
               />
 
               <button
                 disabled={!newTodo}
                 onClick={addTodo}
+                aria-label="Add todo"
                 className={`cursor-pointer text-sm font-light disabled:bg-neutral-950/65 rounded-md bg-neutral-950 px-2 md:px-3 py-1 text-white shadow-lg shadow-neutral-500/20 transition ${
                   !newTodo ? "" : "active:scale-[.95]"
                 }`}
@@ -140,11 +165,11 @@ export default function TodoApp() {
                 Add Todo
               </button>
             </div>
-            {loading ? (
+            {showSpinner ? (
               <div
                 className="inline-block size-4 animate-spin rounded-full border-2 border-current border-t-transparent text-black"
                 role="status"
-                aria-label="loading"
+                aria-label="Loading"
               >
                 <span className="sr-only">Loading...</span>
               </div>
@@ -179,6 +204,7 @@ export default function TodoApp() {
                           checked={todo.completed}
                           onChange={() => toggleTodo(todo.id)}
                           className="mr-2"
+                          aria-label={`Mark todo ${todo.text} as completed`}
                         />
                         <label
                           htmlFor={`todo-${todo.id}`}
@@ -194,24 +220,10 @@ export default function TodoApp() {
 
                       <button
                         onClick={() => removeTodo(todo.id)}
+                        aria-label="Remove todo"
                         className="bg-neutral-300 ml-2 p-2 self-start rounded-xl duration-75 hover:bg-gray-300 transition active:scale-[.95]"
                       >
-                        <svg viewBox="0 0 15 15" className="w-5 fill-white">
-                          <svg
-                            className="w-6 h-6 stroke-red-500"
-                            stroke="currentColor"
-                            strokeWidth="1.5"
-                            viewBox="0 0 24 24"
-                            fill="none"
-                            xmlns="http://www.w3.org/2000/svg"
-                          >
-                            <path
-                              d="M14.74 9l-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 01-2.244 2.077H8.084a2.25 2.25 0 01-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 00-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 013.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 00-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 00-7.5 0"
-                              strokeLinejoin="round"
-                              strokeLinecap="round"
-                            ></path>
-                          </svg>
-                        </svg>
+                        <Trash />
                       </button>
                     </motion.li>
                   ))}
