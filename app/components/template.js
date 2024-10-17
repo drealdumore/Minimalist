@@ -3,6 +3,8 @@
 import { useEffect, useState } from "react";
 
 import { motion, AnimatePresence } from "framer-motion";
+import toast from "react-hot-toast";
+
 import { supabase } from "../lib/supabaseClient";
 
 import Checkbox from "./checkbox";
@@ -108,6 +110,7 @@ export default function TodoApp() {
     const updatedTodos = todos.filter((todo) => todo.id !== id);
     setTodos(updatedTodos);
     saveTodosToLocalStorage(updatedTodos);
+
     const { error } = await supabase
       .from("todos")
       .delete()
@@ -116,6 +119,8 @@ export default function TodoApp() {
 
     if (error) {
       console.error("Error deleting todo:", error.message);
+    } else {
+      toast.success("Todo deleted successfully!");
     }
   };
 
