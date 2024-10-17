@@ -198,24 +198,24 @@ export default function TodoApp() {
                       }}
                       layout
                     >
-                      <div className="flex">
+                      <div className="flex items-center w-full">
                         <Checkbox
                           id={`todo-${todo.id}`}
                           checked={todo.completed}
                           onChange={() => toggleTodo(todo.id)}
-                          className="mr-2"
+                          className="mr-2 mt-1.5 self-start"
                           aria-label={`Mark todo ${todo.text} as completed`}
                         />
-                        <label
+                        <p
                           htmlFor={`todo-${todo.id}`}
-                          className={`text-start ${
+                          className={`text-start truncate w-[15rem] ${
                             todo.completed
                               ? "line-through text-muted-foreground"
                               : ""
                           }`}
                         >
                           {todo.text}
-                        </label>
+                        </p>
                       </div>
 
                       <button

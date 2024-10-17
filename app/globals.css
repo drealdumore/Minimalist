@@ -1,4 +1,4 @@
-@tailwind base;
+/* @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
@@ -42,6 +42,17 @@
       @apply w-[19rem];
     }
   }
+
+  @media (max-width: 360px) {
+    .content {
+      @apply w-[19rem];
+    }
+  }
+
+  .content label {
+    @apply flex-grow block text-start;
+    @apply break-words whitespace-normal;
+  }
 }
 
 @layer base {
@@ -75,7 +86,6 @@
 .checkbox-wrapper .checkbox-svg {
   width: 30px;
   height: 20px;
-  /* height: 30px; */
 }
 
 .checkbox-wrapper .checkbox-box {
@@ -93,6 +103,126 @@
   transition: stroke-dashoffset 0.1s ease-in;
 }
 
+.checkbox-wrapper input[type="checkbox"]:checked + .terms-label .checkbox-box,
+.checkbox-wrapper input[type="checkbox"]:checked + .terms-label .checkbox-tick {
+  stroke-dashoffset: 0;
+} */
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Root variables */
+:root {
+  --primary-background-color: #e4e4e4;
+}
+
+/* Scrollbar styling */
+::-webkit-scrollbar-track {
+  box-shadow: inset 0 0 0 #0da24e;
+  border-radius: 0;
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: #0d1117;
+  border-radius: 10px;
+}
+
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+/* Custom Utilities */
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
+
+  .bg-dots {
+    @apply bg-[radial-gradient(#e5e7eb_1px,transparent_1px)] [background-size:16px_16px];
+  }
+
+  .bg-grid {
+    @apply bg-[linear-gradient(to_right,#80808012_1px,transparent_1px),linear-gradient(to_bottom,#80808012_1px,transparent_1px)] bg-[size:24px_24px];
+  }
+
+  .content {
+    @apply w-[21rem] md:w-[26rem] font-sans;
+  }
+
+  @media (max-width: 360px) {
+    .content {
+      @apply w-[19rem];
+    }
+  }
+
+  @media (max-width: 360px) {
+    .content {
+      @apply w-[19rem];
+    }
+  }
+
+  .content p {
+    @apply block text-start break-words whitespace-normal flex-grow;
+  }
+
+  
+  @media (max-width: 360px) {
+    .content p {
+      @apply w-[13.5rem];
+    }
+  }
+}
+
+/* Base styles */
+@layer base {
+  html {
+    @apply font-SpaceGrotesk w-full scroll-smooth px-2 py-8;
+  }
+
+  body {
+    @apply min-h-screen flex flex-col items-center justify-between transition-all duration-700 bg-primary font-SpaceGrotesk;
+  }
+
+  ::selection {
+    @apply bg-neutral-800 text-white;
+  }
+}
+
+/* Checkbox customization */
+.checkbox-wrapper input[type="checkbox"] {
+  display: none;
+}
+
+.checkbox-wrapper .terms-label {
+  @apply flex items-center cursor-pointer;
+}
+
+.checkbox-wrapper .terms-label .label-text {
+  @apply ml-2;
+}
+
+.checkbox-wrapper .checkbox-svg {
+  width: 30px;
+  height: 20px;
+}
+
+.checkbox-wrapper .checkbox-box {
+  fill: rgba(207, 205, 205, 0.425);
+  stroke: #000;
+  stroke-dasharray: 800;
+  stroke-dashoffset: 800;
+  transition: stroke-dashoffset 0.4s ease-in;
+}
+
+.checkbox-wrapper .checkbox-tick {
+  stroke: #000;
+  stroke-dasharray: 172;
+  stroke-dashoffset: 172;
+  transition: stroke-dashoffset 0.1s ease-in;
+}
+
+/* Checked state transitions */
 .checkbox-wrapper input[type="checkbox"]:checked + .terms-label .checkbox-box,
 .checkbox-wrapper input[type="checkbox"]:checked + .terms-label .checkbox-tick {
   stroke-dashoffset: 0;
