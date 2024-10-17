@@ -111,6 +111,8 @@ export default function TodoApp() {
     setTodos(updatedTodos);
     saveTodosToLocalStorage(updatedTodos);
 
+    toast.success("Todo deleted successfully!");
+
     const { error } = await supabase
       .from("todos")
       .delete()
@@ -119,8 +121,6 @@ export default function TodoApp() {
 
     if (error) {
       console.error("Error deleting todo:", error.message);
-    } else {
-      toast.success("Todo deleted successfully!");
     }
   };
 
