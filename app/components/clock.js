@@ -1,13 +1,18 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useLayoutEffect, useState } from "react";
 
 const Clock = () => {
   const [time, setTime] = useState(new Date());
 
-  useEffect(() => {
-    const interval = setInterval(() => setTime(new Date()), 1000);
-    return () => clearInterval(interval);
+  useLayoutEffect(() => {
+    const updateClock = () => {
+      setTime(new Date());
+      requestAnimationFrame(updateClock);
+    };
+
+    const animationFrame = requestAnimationFrame(updateClock);
+    return () => cancelAnimationFrame(animationFrame);
   }, []);
 
   const degrees = (unit, max) => (unit / max) * 360;
