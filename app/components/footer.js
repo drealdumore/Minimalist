@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { SOCIALS } from "../utils/metadata";
+import Clock from "./clock";
 
 export default function Footer() {
   return (
@@ -36,6 +37,10 @@ export default function Footer() {
       <p className="text-sm text-neutral-600">
         © {new Date().getFullYear()} Minimalist Todo App. All rights reserved.
       </p>
+
+      <div className="flex items-center justify-center size-6 w-full mt-3">
+        <Clock />
+      </div>
     </footer>
   );
 }

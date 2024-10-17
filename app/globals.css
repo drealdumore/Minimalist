@@ -36,6 +36,12 @@
   .content {
     @apply w-[21rem] md:w-[26rem] font-sans;
   }
+
+  @media (max-width: 360px) {
+    .content {
+      @apply w-[19rem];
+    }
+  }
 }
 
 @layer base {

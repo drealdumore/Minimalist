@@ -133,7 +133,9 @@ export default function TodoApp() {
               <button
                 disabled={!newTodo}
                 onClick={addTodo}
-                className="cursor-pointer text-sm font-light disabled:bg-neutral-950/65 rounded-md bg-neutral-950 px-2 md:px-3 py-1  text-white shadow-lg shadow-neutral-500/20 transition active:scale-[.95]"
+                className={`cursor-pointer text-sm font-light disabled:bg-neutral-950/65 rounded-md bg-neutral-950 px-2 md:px-3 py-1 text-white shadow-lg shadow-neutral-500/20 transition ${
+                  !newTodo ? "" : "active:scale-[.95]"
+                }`}
               >
                 Add Todo
               </button>
@@ -153,9 +155,16 @@ export default function TodoApp() {
                     <motion.li
                       key={todo.id}
                       className="flex items-center justify-between p-2 rounded"
-                      initial={{ opacity: 0, y: 20 }}
+                      initial={{ opacity: 0, y: 15 }}
                       animate={{ opacity: 1, y: 0 }}
-                      exit={{ opacity: 0, y: -20 }}
+                      exit={{
+                        opacity: 0,
+                        y: -15,
+                        height: 0,
+                        marginBottom: 0,
+                        paddingTop: 0,
+                        transition: { duration: 0.2 },
+                      }}
                       transition={{
                         type: "spring",
                         stiffness: 300,
