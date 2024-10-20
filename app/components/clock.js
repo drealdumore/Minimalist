@@ -41,7 +41,6 @@ const Clock = () => {
           strokeWidth="2"
         />
 
-        {/* Hour Hand */}
         <line
           x1="50"
           y1="50"
@@ -53,7 +52,6 @@ const Clock = () => {
           transform={`rotate(${hours} 50 50)`} // Rotate around the center (50, 50)
         />
 
-        {/* Minute Hand */}
         <line
           x1="50"
           y1="50"
@@ -65,7 +63,6 @@ const Clock = () => {
           transform={`rotate(${minutes} 50 50)`} // Rotate around the center (50, 50)
         />
 
-        {/* Second Hand */}
         <line
           x1="50"
           y1="50"
@@ -77,7 +74,6 @@ const Clock = () => {
           transform={`rotate(${seconds} 50 50)`} // Rotate around the center (50, 50)
         />
 
-        {/* Center Dot */}
         <circle cx="50" cy="50" r="2" fill="grey" />
       </svg>
     </div>
