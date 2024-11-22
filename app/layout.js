@@ -2,6 +2,9 @@ import "./globals.css";
 import { sharedMetadata, SOCIALS } from "./utils/metadata";
 import localFont from "next/font/local";
 import Footer from "./components/footer";
+import Head from "./components/head";
+import InstallPWA from "./components/InstallPWA";
+import IOSInstallPrompt from "./components/IOSInstallPrompt";
 
 const SpaceGrotesk = localFont({
   src: "../public/assets/fonts/SpaceGrotesk-Regular.ttf",
@@ -11,10 +14,13 @@ const SpaceGrotesk = localFont({
 export default function RootLayout({ children }) {
   return (
     <html lang="en" className={`${SpaceGrotesk.variable}`}>
+      <Head />
       <body>
         <main className="flex-grow flex items-center justify-center w-full">
           {children}
         </main>
+        <InstallPWA />
+        <IOSInstallPrompt />
         <Footer />
       </body>
     </html>
@@ -23,6 +29,13 @@ export default function RootLayout({ children }) {
 
 export const metadata = {
   metadataBase: new URL(sharedMetadata.url),
+
+  manifest: "/manifest.json",
+  
+  icons: {
+    apple: "/icons/icon-192x192.png",
+  },
+
   robots: {
     index: true,
     follow: true,
