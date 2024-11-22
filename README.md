@@ -77,6 +77,7 @@ Visit [http://localhost:3000](http://localhost:3000) to view the app.
 
 - **Frontend**: [Next.js](https://nextjs.org/)
 - **Database**: [Supabase](https://supabase.com/)
+- **Logo**: [Logoshaper](https://www.logoshaper.co/)
 - **State Management**: React `useState` and `useEffect`
 - **UI Components**: Custom components built with Tailwind CSS
 - **Animation**: [Framer Motion](https://www.framer.com/motion/)
