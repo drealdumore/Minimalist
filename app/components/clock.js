@@ -1,34 +1,37 @@
 "use client";
-
-import { useLayoutEffect, useState } from "react";
+import { useEffect, useState } from "react";
 
 const Clock = () => {
-  const [time, setTime] = useState(new Date());
+  const [time, setTime] = useState(() => new Date());
 
-  useLayoutEffect(() => {
+  useEffect(() => {
     const updateClock = () => {
       setTime(new Date());
-      requestAnimationFrame(updateClock);
     };
 
-    const animationFrame = requestAnimationFrame(updateClock);
+    const now = new Date();
+    const delay = 1000 - now.getMilliseconds();
 
-    return () => cancelAnimationFrame(animationFrame);
+    const timeout = setTimeout(() => {
+      updateClock();
+
+      const interval = setInterval(updateClock, 1000);
+      return () => clearInterval(interval);
+    }, delay);
+
+    return () => clearTimeout(timeout);
   }, []);
 
   const degrees = (unit, max) => (unit / max) * 360;
-
   const hours = degrees(time.getHours() % 12, 12) + time.getMinutes() * 0.5;
   const minutes = degrees(time.getMinutes(), 60);
   const seconds = degrees(time.getSeconds(), 60);
-
   const formatTime = (time) => {
     const padZero = (num) => (num < 10 ? `0${num}` : num);
     const hours = padZero(time.getHours());
     const minutes = padZero(time.getMinutes());
     return `${hours}:${minutes}`;
   };
-
   return (
     <div className="w-full h-full max-w-sm mx-auto" title={formatTime(time)}>
       <svg viewBox="0 0 100 100" className="w-full h-full max-w-sm mx-auto">
@@ -40,7 +43,6 @@ const Clock = () => {
           stroke="#333"
           strokeWidth="2"
         />
-
         <line
           x1="50"
           y1="50"
@@ -49,9 +51,8 @@ const Clock = () => {
           stroke="#333"
           strokeWidth="4"
           strokeLinecap="round"
-          transform={`rotate(${hours} 50 50)`} // Rotate around the center (50, 50)
-        />
-
+          transform={`rotate(${hours} 50 50)`}
+        />{" "}
         <line
           x1="50"
           y1="50"
@@ -60,9 +61,8 @@ const Clock = () => {
           stroke="#333"
           strokeWidth="3"
           strokeLinecap="round"
-          transform={`rotate(${minutes} 50 50)`} // Rotate around the center (50, 50)
-        />
-
+          transform={`rotate(${minutes} 50 50)`}
+        />{" "}
         <line
           x1="50"
           y1="50"
@@ -71,11 +71,10 @@ const Clock = () => {
           stroke="red"
           strokeWidth="2"
           strokeLinecap="round"
-          transform={`rotate(${seconds} 50 50)`} // Rotate around the center (50, 50)
-        />
-
+          transform={`rotate(${seconds} 50 50)`}
+        />{" "}
         <circle cx="50" cy="50" r="2" fill="grey" />
-      </svg>
+      </svg>{" "}
     </div>
   );
 };
