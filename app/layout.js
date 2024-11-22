@@ -4,7 +4,6 @@ import localFont from "next/font/local";
 import Footer from "./components/footer";
 import Head from "./components/head";
 import InstallPWA from "./components/InstallPWA";
-import IOSInstallPrompt from "./components/IOSInstallPrompt";
 
 const SpaceGrotesk = localFont({
   src: "../public/assets/fonts/SpaceGrotesk-Regular.ttf",
@@ -20,7 +19,6 @@ export default function RootLayout({ children }) {
           {children}
         </main>
         <InstallPWA />
-        <IOSInstallPrompt />
         <Footer />
       </body>
     </html>
@@ -31,7 +29,7 @@ export const metadata = {
   metadataBase: new URL(sharedMetadata.url),
 
   manifest: "/manifest.json",
-  
+
   icons: {
     apple: "/icons/icon-192x192.png",
   },
