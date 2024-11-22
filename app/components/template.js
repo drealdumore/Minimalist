@@ -1,48 +1,101 @@
 "use client";
 
 import { useEffect, useState } from "react";
-
-import { motion, AnimatePresence } from "framer-motion";
 import toast from "react-hot-toast";
-
 import { supabase } from "../lib/supabaseClient";
+import debounce from "../utils/debounce";
 
 import Checkbox from "./checkbox";
 import Trash from "./trash";
 
 import Motion from "../lib/motion/y-motion";
+import { motion, AnimatePresence } from "framer-motion";
 
 import getUserId from "../utils/getUserId";
 import getTodosFromLocalStorage from "../utils/localStorage/getTodos";
 import saveTodosToLocalStorage from "../utils/localStorage/saveTodos";
 
-import debounce from "../utils/debounce";
-
 export default function TodoApp() {
   const [todos, setTodos] = useState([]);
   const [newTodo, setNewTodo] = useState("");
   const [userId, setUserId] = useState("");
+  const [isOnline, setIsOnline] = useState(true);
   const [loading, setLoading] = useState(false);
   const [showSpinner, setShowSpinner] = useState(false);
 
-  const fetchTodos = async (userId) => {
-    setLoading(true);
-    const { data, error } = await supabase
-      .from("todos")
-      .select("*")
-      .eq("user_id", userId);
+  useEffect(() => {
+    if (loading) {
+      const timer = setTimeout(() => setShowSpinner(true), 300);
+      return () => clearTimeout(timer);
+    }
+    setShowSpinner(false);
+  }, [loading]);
 
-    if (error) {
-      console.error("Error fetching todos:", error.message);
-    } else {
-      const mergedTodos = mergeLocalAndDatabaseTodos(
-        getTodosFromLocalStorage(),
-        data
-      );
+  useEffect(() => {
+    setIsOnline(navigator.onLine);
+
+    const initializeApp = async () => {
+      setLoading(true);
+
+      const id = getUserId();
+      setUserId(id);
+
+      const localTodos = getTodosFromLocalStorage();
+      if (localTodos.length === 0) {
+        setLoading(false);
+        return;
+      }
+      setTodos(localTodos);
+
+      if (isOnline) {
+        await syncTodosWithServer(localTodos);
+      }
+
+      setLoading(false);
+    };
+
+    initializeApp();
+
+    const handleOnline = () => setIsOnline(true);
+    const handleOffline = () => setIsOnline(false);
+
+    window.addEventListener("online", handleOnline);
+    window.addEventListener("offline", handleOffline);
+
+    return () => {
+      window.removeEventListener("online", handleOnline);
+      window.removeEventListener("offline", handleOffline);
+    };
+  }, [isOnline]);
+
+  const syncTodosWithServer = async (localTodos) => {
+    try {
+      const { data: serverTodos, error } = await supabase
+        .from("todos")
+        .select("*")
+        .eq("user_id", userId);
+
+      if (error) throw error;
+
+      const mergedTodos = mergeLocalAndDatabaseTodos(localTodos, serverTodos);
       setTodos(mergedTodos);
       saveTodosToLocalStorage(mergedTodos);
+
+      const unsyncedTodos = localTodos.filter(
+        (todo) => !serverTodos.some((serverTodo) => serverTodo.id === todo.id)
+      );
+
+      if (unsyncedTodos.length > 0) {
+        const { error: syncError } = await supabase
+          .from("todos")
+          .insert(unsyncedTodos);
+        if (syncError) throw syncError;
+
+        toast.success("Todos synced with the server!");
+      }
+    } catch (error) {
+      console.error("Error syncing todos:", error.message);
     }
-    setLoading(false);
   };
 
   const mergeLocalAndDatabaseTodos = (localTodos, dbTodos) => {
@@ -53,35 +106,32 @@ export default function TodoApp() {
     return [...uniqueLocalTodos, ...dbTodos];
   };
 
-  useEffect(() => {
-    const id = getUserId();
-    setUserId(id);
-
-    const localTodos = getTodosFromLocalStorage();
-    setTodos(localTodos);
-
-    fetchTodos(id);
-  }, []);
-
   const addTodo = debounce(async () => {
-    if (newTodo.trim() !== "") {
-      const newTodoItem = {
-        id: Date.now(),
-        text: newTodo,
-        completed: false,
-        user_id: userId,
-      };
+    if (!newTodo.trim()) return;
 
-      const updatedTodos = [...todos, newTodoItem];
-      setTodos(updatedTodos);
-      saveTodosToLocalStorage(updatedTodos);
+    const newTodoItem = {
+      id: Date.now(),
+      text: newTodo,
+      completed: false,
+      user_id: userId,
+      synced: isOnline,
+    };
 
-      setNewTodo("");
+    const updatedTodos = [...todos, newTodoItem];
+    setTodos(updatedTodos);
+    saveTodosToLocalStorage(updatedTodos);
 
-      const { error } = await supabase.from("todos").insert([newTodoItem]);
-      if (error) {
+    setNewTodo("");
+
+    if (isOnline) {
+      try {
+        const { error } = await supabase.from("todos").insert([newTodoItem]);
+        if (error) throw error;
+      } catch (error) {
         console.error("Error adding todo:", error.message);
       }
+    } else {
+      toast("Todo saved locally and will sync when you're online.");
     }
   }, 200);
 
@@ -92,15 +142,17 @@ export default function TodoApp() {
     setTodos(updatedTodos);
     saveTodosToLocalStorage(updatedTodos);
 
-    const updatedTodo = updatedTodos.find((todo) => todo.id === id);
-    if (updatedTodo) {
-      const { error } = await supabase
-        .from("todos")
-        .update({ completed: updatedTodo.completed })
-        .eq("id", id)
-        .eq("user_id", userId);
+    if (isOnline) {
+      const updatedTodo = updatedTodos.find((todo) => todo.id === id);
+      try {
+        const { error } = await supabase
+          .from("todos")
+          .update({ completed: updatedTodo.completed })
+          .eq("id", id)
+          .eq("user_id", userId);
 
-      if (error) {
+        if (error) throw error;
+      } catch (error) {
         console.error("Error updating todo:", error.message);
       }
     }
@@ -113,33 +165,52 @@ export default function TodoApp() {
 
     toast.success("Todo deleted successfully!");
 
-    const { error } = await supabase
-      .from("todos")
-      .delete()
-      .eq("id", id)
-      .eq("user_id", userId);
+    if (isOnline) {
+      try {
+        const { error } = await supabase
+          .from("todos")
+          .delete()
+          .eq("id", id)
+          .eq("user_id", userId);
 
-    if (error) {
-      console.error("Error deleting todo:", error.message);
+        if (error) throw error;
+      } catch (error) {
+        console.error("Error deleting todo:", error.message);
+      }
     }
   };
-
-  useEffect(() => {
-    if (loading) {
-      const timer = setTimeout(() => setShowSpinner(true), 300); // 300ms delay
-      return () => clearTimeout(timer);
-    }
-    setShowSpinner(false);
-  }, [loading]);
 
   return (
     <Motion>
       <div className="flex flex-col gap-3 text-center justify-center items-center relative">
         <div className="max-w-md mx-auto p-4 bg-background">
-          <h1 className="text-3xl font-bold text-center">Minimalist.</h1>
-          <p className="sm:text-xl font-thin mb-4 text-center">
-            The most minimal Todo app
-          </p>
+          <div className=" relative">
+            <h1 className="text-3xl group inline-flex font-bold text-center relative">
+              Minimalist.
+              <span className="flex cursor-pointer absolute h-3 w-3 top-0 right-0 -mt-1 -mr-1">
+                <span
+                  className={`animate-ping group absolute inline-flex ${
+                    isOnline ? "bg-green-400" : "bg-red-400"
+                  } h-full w-full rounded-full opacity-75`}
+                ></span>
+                <span
+                  className={`relative inline-flex rounded-full h-3 w-3 ${
+                    isOnline ? "bg-green-500" : "bg-red-500"
+                  }`}
+                ></span>
+                <span className="opacity-0  group-hover:opacity-100 delay-75 scale-90 group-hover:scale-100 pointer-events-none transition-all duration-150 ease-out absolute text-sm px-2.5 py-1 rounded-full bg-neutral-950 z-[99] text-white dark:bg-white dark:text-neutral-950 -top-5 group-hover:-top-6 left-[50%] translate-x-[-50%] -translate-y-3">
+                  <span className="w-2.5 h-2.5 rounded-sm bg-neutral-950 absolute scale-75 group-hover:scale-100 transition-transform duration-200 z-30 transform rotate-45 dark:bg-white -bottom-1 left-[50%] translate-x-[-50%]"></span>
+                  <span className="z-50 font-light font-sans relative truncate text-sm">
+                    {isOnline ? "Online" : "Offline - Changes will sync later"}
+                  </span>
+                </span>
+              </span>
+            </h1>
+
+            <p className="sm:text-xl font-thin mb-4 text-center">
+              The most minimal Todo app
+            </p>
+          </div>
 
           <div className="content">
             <div className="flex mb-4">
@@ -164,6 +235,7 @@ export default function TodoApp() {
                 Add Todo
               </button>
             </div>
+
             {showSpinner ? (
               <div
                 className="inline-block size-4 animate-spin rounded-full border-2 border-current border-t-transparent text-black"
