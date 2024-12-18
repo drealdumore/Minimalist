@@ -18,7 +18,6 @@ export default function RootLayout({ children }) {
         <main className="flex-grow flex items-center justify-center w-full">
           {children}
         </main>
-        <InstallPWA />
         <Footer />
       </body>
     </html>
